@@ -1,153 +1,191 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculadora de Ritmo</title>
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-      background: #f9fafb;
-      color: #111827;
-      padding: 20px;
-    }
-    h1 {
-      text-align: center;
-      font-size: 1.5rem;
-      margin-bottom: 20px;
-    }
-    .card {
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      padding: 20px;
-      margin-bottom: 20px;
-    }
-    label { display: block; margin-bottom: 6px; font-weight: 500; }
-    input, button {
-      padding: 12px;
-      border-radius: 12px;
-      font-size: 1rem;
-      width: 100%;
-      box-sizing: border-box;
-      border: 1px solid #d1d5db;
-      text-align: center;
-    }
-    input:invalid {
-      border-color: #f87171; /* rojo si inválido */
-    }
-    button {
-      background: #2563eb;
-      color: white;
-      border: none;
-      font-weight: 600;
-      margin-top: 10px;
-    }
-    button:hover { background: #1e40af; cursor: pointer; }
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    th, td { padding: 10px; text-align: center; }
-    th { background: #f3f4f6; }
-    tr:nth-child(even) td { background: #f9fafb; }
-    .time { font-weight: 500; }
-    #totalTime {
-      text-align: center;
-      font-size: 1.2rem;
-      font-weight: bold;
-      margin: 10px 0 20px 0;
-      color: #2563eb;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de Ritmo</title>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    background: #f9fafb;
+    color: #111827;
+    padding: 20px;
+  }
+  h1 { text-align: center; font-size: 1.5rem; margin-bottom: 20px; }
+  .card { background: white; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); padding: 20px; margin-bottom: 20px; }
+  label { display: block; margin-bottom: 6px; font-weight: 500; }
+  select, input, button {
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #d1d5db;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  input:invalid { border-color: #f87171; }
+  input::placeholder { color: #9ca3af; }
+  button { background: #2563eb; color: white; border: none; font-weight: 600; }
+  button:hover { background: #1e40af; cursor: pointer; }
+  table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+  th, td { padding: 10px; text-align: center; }
+  th { background: #f3f4f6; }
+  tr:nth-child(even) td { background: #f9fafb; }
+  .time { font-weight: 500; }
+  #totalTime, #paceResult { text-align: center; font-size: 1.2rem; font-weight: bold; margin: 10px 0 20px 0; color: #2563eb; }
+</style>
 </head>
 <body>
-  <h1>🏃 Calculadora de Ritmo</h1>
 
-  <div class="card">
-    <label for="pace">Ritmo (mm:ss por km):</label>
-    <input type="tel" id="pace" maxlength="5" placeholder="05:30" pattern="[0-1]?[0-9]:[0-5][0-9]">
+<h1>🏃 Calculadora de Ritmo</h1>
 
-    <label for="distance">Distancia (km):</label>
-    <input type="number" id="distance" min="1" max="42" value="21" inputmode="numeric" pattern="[0-9]*">
+<div class="card">
+  <label>Modo de cálculo:</label>
+  <select id="modeSelect">
+    <option value="paceToTime">Ritmo → Tiempo total</option>
+    <option value="timeToPace">Tiempo total → Ritmo</option>
+  </select>
+</div>
 
-    <button id="generateBtn">Generar Tabla</button>
-  </div>
+<!-- Sección Ritmo → Tiempo -->
+<div class="card" id="sectionPaceToTime">
+  <label for="pace">Ritmo (mm:ss por km):</label>
+  <input type="tel" id="pace" maxlength="5" placeholder="mm:ss">
 
-  <div id="result" class="card" style="display:none;">
-    <div id="totalTime"></div>
-    <table>
-      <thead>
-        <tr><th>Km</th><th>Tiempo Acumulado</th></tr>
-      </thead>
-      <tbody id="tableBody"></tbody>
-    </table>
-  </div>
+  <label for="distance">Distancia (km):</label>
+  <input type="number" id="distance" min="1" max="42" value="21" inputmode="numeric">
 
-  <script>
-    const paceInput = document.getElementById("pace");
+  <button id="generateBtn">Generar Tabla</button>
+</div>
 
-    // Formato bonito mientras escribes: autoinsertar ":" y limitar valores
-    paceInput.addEventListener("input", function(){
-      let val = this.value.replace(/\D/g,''); // eliminar no números
-      if(val.length > 2){
-        let min = val.slice(0,2);
-        let sec = val.slice(2,4);
-        if(Number(min) > 10) min = "10"; // máximo minutos 10
-        if(Number(sec) > 59) sec = "59";  // máximo segundos 59
-        val = min + ':' + sec;
-      }
-      this.value = val;
-    });
+<div id="result" class="card" style="display:none;">
+  <div id="totalTime"></div>
+  <table>
+    <thead>
+      <tr><th>Km</th><th>Tiempo Acumulado</th></tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</div>
 
-    function formatTime(totalSec) {
-      const hrs = Math.floor(totalSec / 3600);
-      const min = Math.floor((totalSec % 3600) / 60);
-      const sec = totalSec % 60;
-      return (hrs > 0 ? hrs + ":" : "") +
-             String(min).padStart(2, "0") + ":" +
-             String(sec).padStart(2, "0");
-    }
+<!-- Sección Tiempo → Ritmo -->
+<div class="card" id="sectionTimeToPace" style="display:none;">
+  <label for="targetTime">Tiempo total (hh:mm:ss):</label>
+  <input type="tel" id="targetTime" maxlength="8" placeholder="hh:mm:ss">
 
-    function generateTable() {
-      const paceVal = paceInput.value.split(':');
-      if(paceVal.length !== 2) {
-        alert("⚠️ Ingresa el ritmo en formato mm:ss");
-        return;
-      }
-      const min = Number(paceVal[0]);
-      const sec = Number(paceVal[1]);
-      const distance = Number(document.getElementById("distance").value);
+  <label for="targetDistance">Distancia (km):</label>
+  <input type="number" id="targetDistance" min="1" max="42" value="10" inputmode="numeric">
 
-      if(isNaN(min) || isNaN(sec) || (min===0 && sec===0) || distance < 1 || distance > 42) {
-        alert("⚠️ Ingresa valores válidos:\n- Ritmo 0:01 a 10:59\n- Distancia 1 a 42 km");
-        return;
-      }
+  <button id="calcPaceBtn">Calcular Ritmo</button>
+  <div id="paceResult"></div>
+</div>
 
-      const paceSec = min*60 + sec;
+<script>
+// --- Selector de modo ---
+const modeSelect = document.getElementById("modeSelect");
+const sectionPaceToTime = document.getElementById("sectionPaceToTime");
+const sectionTimeToPace = document.getElementById("sectionTimeToPace");
+const resultDiv = document.getElementById("result");
+const tableBody = document.getElementById("tableBody");
+const totalTimeDiv = document.getElementById("totalTime");
+const paceResultDiv = document.getElementById("paceResult");
 
-      setTimeout(() => {
-        const tbody = document.getElementById("tableBody");
-        tbody.innerHTML = "";
+modeSelect.addEventListener("change", () => {
+  if(modeSelect.value === "paceToTime"){
+    sectionPaceToTime.style.display = "block";
+    sectionTimeToPace.style.display = "none";
+  } else {
+    sectionPaceToTime.style.display = "none";
+    sectionTimeToPace.style.display = "block";
+  }
+  // Limpiar resultados previos
+  resultDiv.style.display = "none";
+  tableBody.innerHTML = "";
+  totalTimeDiv.textContent = "";
+  paceResultDiv.textContent = "";
+});
 
-        for(let km=1; km<=distance; km++){
-          const row = document.createElement("tr");
-          const kmCell = document.createElement("td");
-          kmCell.textContent = km;
+// --- Función de formato hh:mm:ss ---
+function formatHHMMSS(totalSec) {
+  const hrs = Math.floor(totalSec/3600);
+  const min = Math.floor((totalSec%3600)/60);
+  const sec = totalSec % 60;
+  return String(hrs).padStart(2,'0') + ":" + String(min).padStart(2,'0') + ":" + String(sec).padStart(2,'0');
+}
 
-          const timeCell = document.createElement("td");
-          timeCell.textContent = formatTime(paceSec*km);
-          timeCell.classList.add("time");
+// --- Ritmo → Tiempo ---
+const paceInput = document.getElementById("pace");
+paceInput.addEventListener("input", function(){
+  let val = this.value.replace(/\D/g,'');
+  if(val.length > 2){
+    let min = val.slice(0,2);
+    let sec = val.slice(2,4);
+    if(Number(min) > 10) min = "10";
+    if(Number(sec) > 59) sec = "59";
+    val = min + ':' + sec;
+  }
+  this.value = val;
+});
 
-          row.appendChild(kmCell);
-          row.appendChild(timeCell);
-          tbody.appendChild(row);
-        }
+function generateTable() {
+  const paceVal = paceInput.value.split(':');
+  if(paceVal.length !== 2) { alert("⚠️ Ingresa el ritmo en mm:ss"); return; }
+  const min = Number(paceVal[0]);
+  const sec = Number(paceVal[1]);
+  const distance = Number(document.getElementById("distance").value);
+  if(isNaN(min) || isNaN(sec) || (min===0 && sec===0) || distance < 1 || distance > 42){
+    alert("⚠️ Valores inválidos: Ritmo 0:01 a 10:59, distancia 1-42 km");
+    return;
+  }
+  const paceSec = min*60 + sec;
 
-        document.getElementById("totalTime").textContent =
-          `⏱️ Tiempo estimado total: ${formatTime(paceSec*distance)}`;
-        document.getElementById("result").style.display = "block";
-      },10);
-    }
+  const tbody = tableBody;
+  tbody.innerHTML = "";
+  for(let km=1; km<=distance; km++){
+    const row = document.createElement("tr");
+    const kmCell = document.createElement("td"); kmCell.textContent = km;
+    const timeCell = document.createElement("td"); timeCell.textContent = formatHHMMSS(paceSec*km); timeCell.classList.add("time");
+    row.appendChild(kmCell); row.appendChild(timeCell);
+    tbody.appendChild(row);
+  }
+  totalTimeDiv.textContent = `⏱️ Tiempo total estimado: ${formatHHMMSS(paceSec*distance)}`;
+  resultDiv.style.display = "block";
+}
+document.getElementById("generateBtn").addEventListener("click", generateTable);
 
-    document.getElementById("generateBtn").addEventListener("click", generateTable);
-  </script>
+// --- Tiempo hh:mm:ss → Ritmo ---
+const targetTimeInput = document.getElementById("targetTime");
+targetTimeInput.addEventListener("input", function(){
+  let val = this.value.replace(/\D/g,'');
+  if(val.length > 2){
+    val = val.slice(0,2) + ':' + val.slice(2,4) + (val.length>4? ':' + val.slice(4,6) : '');
+  }
+  this.value = val;
+});
+
+function calcPaceFromTime() {
+  const parts = targetTimeInput.value.split(':');
+  if(parts.length !== 3){ alert("⚠️ Ingresa tiempo en hh:mm:ss"); return; }
+  const hrs = Number(parts[0]);
+  const min = Number(parts[1]);
+  const sec = Number(parts[2]);
+  const distance = Number(document.getElementById("targetDistance").value);
+  if(isNaN(hrs) || isNaN(min) || isNaN(sec) || distance < 1 || distance > 42){
+    alert("⚠️ Valores inválidos: Tiempo hh:mm:ss, distancia 1-42 km");
+    return;
+  }
+
+  const totalSec = hrs*3600 + min*60 + sec;
+  const paceSec = totalSec / distance;
+  const paceMin = Math.floor(paceSec/60);
+  const paceRemainSec = Math.round(paceSec % 60);
+
+  paceResultDiv.textContent =
+    `🏃 Ritmo requerido: ${String(paceMin).padStart(2,'0')}:${String(paceRemainSec).padStart(2,'0')} por km`;
+}
+document.getElementById("calcPaceBtn").addEventListener("click", calcPaceFromTime);
+</script>
+
 </body>
 </html>
