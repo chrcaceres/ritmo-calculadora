@@ -33,6 +33,9 @@
       border: 1px solid #d1d5db;
       text-align: center;
     }
+    input:invalid {
+      border-color: #f87171; /* rojo si inválido */
+    }
     button {
       background: #2563eb;
       color: white;
@@ -40,7 +43,7 @@
       font-weight: 600;
       margin-top: 10px;
     }
-    button:hover { background: #1e40af; }
+    button:hover { background: #1e40af; cursor: pointer; }
     table { width: 100%; border-collapse: collapse; margin-top: 15px; }
     th, td { padding: 10px; text-align: center; }
     th { background: #f3f4f6; }
@@ -60,10 +63,10 @@
 
   <div class="card">
     <label for="pace">Ritmo (mm:ss por km):</label>
-    <input type="tel" id="pace" maxlength="5" placeholder="05:30">
+    <input type="tel" id="pace" maxlength="5" placeholder="05:30" pattern="[0-1]?[0-9]:[0-5][0-9]">
 
     <label for="distance">Distancia (km):</label>
-    <input type="number" id="distance" min="1" max="42" value="21">
+    <input type="number" id="distance" min="1" max="42" value="21" inputmode="numeric" pattern="[0-9]*">
 
     <button id="generateBtn">Generar Tabla</button>
   </div>
@@ -79,12 +82,17 @@
   </div>
 
   <script>
-    // Autoinsertar ":" después de dos dígitos
     const paceInput = document.getElementById("pace");
-    paceInput.addEventListener("input", function(e){
-      let val = this.value.replace(/\D/g,''); // eliminar todo lo que no sea número
+
+    // Formato bonito mientras escribes: autoinsertar ":" y limitar valores
+    paceInput.addEventListener("input", function(){
+      let val = this.value.replace(/\D/g,''); // eliminar no números
       if(val.length > 2){
-        val = val.slice(0,2) + ':' + val.slice(2,4);
+        let min = val.slice(0,2);
+        let sec = val.slice(2,4);
+        if(Number(min) > 10) min = "10"; // máximo minutos 10
+        if(Number(sec) > 59) sec = "59";  // máximo segundos 59
+        val = min + ':' + sec;
       }
       this.value = val;
     });
@@ -108,8 +116,8 @@
       const sec = Number(paceVal[1]);
       const distance = Number(document.getElementById("distance").value);
 
-      if(isNaN(min) || isNaN(sec) || (min===0 && sec===0) || distance <= 0) {
-        alert("⚠️ Ingresa un ritmo válido y una distancia mayor a 0");
+      if(isNaN(min) || isNaN(sec) || (min===0 && sec===0) || distance < 1 || distance > 42) {
+        alert("⚠️ Ingresa valores válidos:\n- Ritmo 0:01 a 10:59\n- Distancia 1 a 42 km");
         return;
       }
 
