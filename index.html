@@ -24,37 +24,16 @@
       margin-bottom: 20px;
     }
     label { display: block; margin-bottom: 6px; font-weight: 500; }
-    select, button {
-      padding: 10px;
+    input, button {
+      padding: 12px;
       border-radius: 12px;
       font-size: 1rem;
-    }
-    select {
-      border: 1px solid #d1d5db;
-      margin-bottom: 15px;
       width: 100%;
-      text-align: center;
-      background: white;
-      -webkit-appearance: menulist; /* iOS fix */
-    }
-    .time-inputs {
-      display: grid;
-      grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
-      gap: 10px; /* Separación entre los selects */
-    }
-
-    .time-inputs select {
-      width: 100%;
-      padding: 12px 10px; /* Aumenta el área de touch en iOS */
-      font-size: 1rem;
+      box-sizing: border-box;
       border: 1px solid #d1d5db;
-      border-radius: 12px;
-      background: white;
       text-align: center;
-      -webkit-appearance: menulist; /* Mantiene estilo nativo iOS */
     }
     button {
-      width: 100%;
       background: #2563eb;
       color: white;
       border: none;
@@ -80,130 +59,11 @@
   <h1>🏃 Calculadora de Ritmo</h1>
 
   <div class="card">
-    <label>Ritmo (min:seg por km):</label>
-    <div class="time-inputs">
-      <select id="paceMin">
-        <option value="0">00</option>
-        <option value="1">01</option>
-        <option value="2">02</option>
-        <option value="3">03</option>
-        <option value="4">04</option>
-        <option value="5" selected>05</option>
-        <option value="6">06</option>
-        <option value="7">07</option>
-        <option value="8">08</option>
-        <option value="9">09</option>
-        <option value="10">10</option>
-      </select>
-      <select id="paceSec">
-        <option value="0">00</option>
-        <option value="1">01</option>
-        <option value="2">02</option>
-        <option value="3">03</option>
-        <option value="4">04</option>
-        <option value="5">05</option>
-        <option value="6">06</option>
-        <option value="7">07</option>
-        <option value="8">08</option>
-        <option value="9">09</option>
-        <option value="10">10</option>
-        <option value="11">11</option>
-        <option value="12">12</option>
-        <option value="13">13</option>
-        <option value="14">14</option>
-        <option value="15">15</option>
-        <option value="16">16</option>
-        <option value="17">17</option>
-        <option value="18">18</option>
-        <option value="19">19</option>
-        <option value="20">20</option>
-        <option value="21">21</option>
-        <option value="22">22</option>
-        <option value="23">23</option>
-        <option value="24">24</option>
-        <option value="25">25</option>
-        <option value="26">26</option>
-        <option value="27">27</option>
-        <option value="28">28</option>
-        <option value="29">29</option>
-        <option value="30" selected>30</option>
-        <option value="31">31</option>
-        <option value="32">32</option>
-        <option value="33">33</option>
-        <option value="34">34</option>
-        <option value="35">35</option>
-        <option value="36">36</option>
-        <option value="37">37</option>
-        <option value="38">38</option>
-        <option value="39">39</option>
-        <option value="40">40</option>
-        <option value="41">41</option>
-        <option value="42">42</option>
-        <option value="43">43</option>
-        <option value="44">44</option>
-        <option value="45">45</option>
-        <option value="46">46</option>
-        <option value="47">47</option>
-        <option value="48">48</option>
-        <option value="49">49</option>
-        <option value="50">50</option>
-        <option value="51">51</option>
-        <option value="52">52</option>
-        <option value="53">53</option>
-        <option value="54">54</option>
-        <option value="55">55</option>
-        <option value="56">56</option>
-        <option value="57">57</option>
-        <option value="58">58</option>
-        <option value="59">59</option>
-      </select>
-    </div>
+    <label for="pace">Ritmo (mm:ss por km):</label>
+    <input type="tel" id="pace" maxlength="5" placeholder="05:30">
 
     <label for="distance">Distancia (km):</label>
-    <select id="distance">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
-        <option value="11">11</option>
-        <option value="12">12</option>
-        <option value="13">13</option>
-        <option value="14">14</option>
-        <option value="15">15</option>
-        <option value="16">16</option>
-        <option value="17">17</option>
-        <option value="18">18</option>
-        <option value="19">19</option>
-        <option value="20">20</option>
-        <option value="21" selected>21</option>
-        <option value="22">22</option>
-        <option value="23">23</option>
-        <option value="24">24</option>
-        <option value="25">25</option>
-        <option value="26">26</option>
-        <option value="27">27</option>
-        <option value="28">28</option>
-        <option value="29">29</option>
-        <option value="30">30</option>
-        <option value="31">31</option>
-        <option value="32">32</option>
-        <option value="33">33</option>
-        <option value="34">34</option>
-        <option value="35">35</option>
-        <option value="36">36</option>
-        <option value="37">37</option>
-        <option value="38">38</option>
-        <option value="39">39</option>
-        <option value="40">40</option>
-        <option value="41">41</option>
-        <option value="42">42</option>
-    </select>
+    <input type="number" id="distance" min="1" max="42" value="21">
 
     <button id="generateBtn">Generar Tabla</button>
   </div>
@@ -219,6 +79,16 @@
   </div>
 
   <script>
+    // Autoinsertar ":" después de dos dígitos
+    const paceInput = document.getElementById("pace");
+    paceInput.addEventListener("input", function(e){
+      let val = this.value.replace(/\D/g,''); // eliminar todo lo que no sea número
+      if(val.length > 2){
+        val = val.slice(0,2) + ':' + val.slice(2,4);
+      }
+      this.value = val;
+    });
+
     function formatTime(totalSec) {
       const hrs = Math.floor(totalSec / 3600);
       const min = Math.floor((totalSec % 3600) / 60);
@@ -229,30 +99,33 @@
     }
 
     function generateTable() {
-      const min = Number(document.getElementById("paceMin").value);
-      const sec = Number(document.getElementById("paceSec").value);
+      const paceVal = paceInput.value.split(':');
+      if(paceVal.length !== 2) {
+        alert("⚠️ Ingresa el ritmo en formato mm:ss");
+        return;
+      }
+      const min = Number(paceVal[0]);
+      const sec = Number(paceVal[1]);
       const distance = Number(document.getElementById("distance").value);
 
-      if ((min === 0 && sec === 0) || distance <= 0) {
-        alert("⚠️ Ingresa un ritmo válido y una distancia mayor a 0.");
+      if(isNaN(min) || isNaN(sec) || (min===0 && sec===0) || distance <= 0) {
+        alert("⚠️ Ingresa un ritmo válido y una distancia mayor a 0");
         return;
       }
 
-      const paceSec = min * 60 + sec;
+      const paceSec = min*60 + sec;
 
-      // Usamos setTimeout para forzar render en iOS
       setTimeout(() => {
         const tbody = document.getElementById("tableBody");
         tbody.innerHTML = "";
 
-        for (let km = 1; km <= distance; km++) {
+        for(let km=1; km<=distance; km++){
           const row = document.createElement("tr");
-
           const kmCell = document.createElement("td");
           kmCell.textContent = km;
 
           const timeCell = document.createElement("td");
-          timeCell.textContent = formatTime(paceSec * km);
+          timeCell.textContent = formatTime(paceSec*km);
           timeCell.classList.add("time");
 
           row.appendChild(kmCell);
@@ -261,17 +134,12 @@
         }
 
         document.getElementById("totalTime").textContent =
-          `⏱️ Tiempo estimado total: ${formatTime(paceSec * distance)}`;
+          `⏱️ Tiempo estimado total: ${formatTime(paceSec*distance)}`;
         document.getElementById("result").style.display = "block";
-      }, 10);
+      },10);
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      document.getElementById("generateBtn").addEventListener("click", function(e){
-        e.preventDefault();
-        generateTable();
-      });
-    });
+    document.getElementById("generateBtn").addEventListener("click", generateTable);
   </script>
 </body>
 </html>
