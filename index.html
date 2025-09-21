@@ -38,10 +38,21 @@
       -webkit-appearance: menulist; /* iOS fix */
     }
     .time-inputs {
-      display: flex;
-      gap: 10px;
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
+      gap: 10px; /* Separación entre los selects */
     }
-    .time-inputs select { flex: 1; }
+
+    .time-inputs select {
+      width: 100%;
+      padding: 12px 10px; /* Aumenta el área de touch en iOS */
+      font-size: 1rem;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      background: white;
+      text-align: center;
+      -webkit-appearance: menulist; /* Mantiene estilo nativo iOS */
+    }
     button {
       width: 100%;
       background: #2563eb;
